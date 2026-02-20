@@ -37,7 +37,7 @@ export function AboutSection() {
                             </ul>
                         </div>
                         <p>
-                            エンジニア歴は若手ですが、その分<strong className="text-foreground">スピード感と柔軟性</strong>には自信があります。
+                            社会人としての実務経験はまだ浅いですが、その分<strong className="text-foreground">スピード感と柔軟性</strong>には自信があります。
                             丁寧なヒアリングと、分かりやすい説明を心がけています。
                             一緒により良いサービスを作れることを楽しみにしております。
                         </p>
