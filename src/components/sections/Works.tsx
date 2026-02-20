@@ -32,7 +32,7 @@ const WORKS = [
 
 export function WorksSection() {
     return (
-        <section className="py-24 px-4 bg-background">
+        <section id="works" className="py-24 px-4 bg-background">
             <div className="container mx-auto max-w-6xl">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 export function HeroSection() {
     return (
-        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-background">
+        <section className="relative h-screen flex items-center justify-center overflow-hidden bg-transparent">
             {/* Background Gradient Blob */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] animate-pulse" />
 
@@ -34,15 +34,19 @@ export function HeroSection() {
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <Button size="lg" className="rounded-full text-base px-8 group relative overflow-hidden">
-                            <span className="relative z-10 flex items-center gap-2">
-                                View Works <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </span>
-                            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                        </Button>
-                        <Button variant="outline" size="lg" className="rounded-full text-base px-8 border-primary/20 hover:bg-primary/5">
-                            Contact Me
-                        </Button>
+                        <a href="#works">
+                            <Button size="lg" className="rounded-full text-base px-8 group relative overflow-hidden">
+                                <span className="relative z-10 flex items-center gap-2">
+                                    View Works <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            </Button>
+                        </a>
+                        <a href="#contact">
+                            <Button variant="outline" size="lg" className="rounded-full text-base px-8 border-primary/20 hover:bg-primary/5">
+                                Contact Me
+                            </Button>
+                        </a>
                     </div>
                 </motion.div>
             </div>

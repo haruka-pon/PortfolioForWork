@@ -6,9 +6,9 @@ import { Briefcase, Calendar, Building2 } from "lucide-react";
 
 const CAREER_ITEMS = [
     {
-        company: "株式会社ゲオネットワークス",
+        company: "IT・通信業界 (東証プライム上場グループ)",
         period: "2024年4月 – 現在",
-        role: "新卒入社 / エンジニア",
+        role: "フルスタックエンジニア",
         description: [
             {
                 title: "大規模ECサイトの保守・運用・開発",
@@ -39,7 +39,7 @@ const CAREER_ITEMS = [
 
 export function CareerSection() {
     return (
-        <section className="py-24 px-4 bg-background relative overflow-hidden">
+        <section id="career" className="py-24 px-4 bg-background relative overflow-hidden">
             <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:30px_30px]" />
             <div className="container mx-auto max-w-4xl relative z-10">
                 <motion.div
@@ -75,19 +75,20 @@ export function CareerSection() {
                                     {/* Desktop Timeline Line */}
                                     <div className="hidden md:block absolute top-2 -right-6 w-px h-full bg-gradient-to-b from-primary/50 to-transparent" />
 
-                                    <div className="sticky top-24 space-y-2">
+                                    <div className="sticky top-24 space-y-3">
                                         <h3 className="text-xl font-bold text-foreground flex items-center md:justify-end gap-2 group">
-                                            <Building2 className="w-5 h-5 md:hidden text-primary" />
-                                            {item.company}
+                                            <Briefcase className="w-5 h-5 md:hidden text-primary" />
+                                            {item.role}
                                         </h3>
-                                        <div className="flex items-center md:justify-end gap-2 text-muted-foreground">
-                                            <Calendar className="w-4 h-4" />
-                                            <span className="text-sm font-mono">{item.period}</span>
-                                        </div>
-                                        <div className="pt-2">
-                                            <Badge variant="outline" className="border-primary/30 text-primary">
-                                                {item.role}
-                                            </Badge>
+                                        <div className="flex flex-col items-start md:items-end gap-1.5 text-muted-foreground">
+                                            <div className="flex items-center gap-2">
+                                                <Building2 className="w-4 h-4" />
+                                                <span className="text-sm">{item.company}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Calendar className="w-4 h-4" />
+                                                <span className="text-sm font-mono">{item.period}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
