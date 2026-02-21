@@ -19,11 +19,8 @@ export function ContactSection() {
         const formData = new FormData(form);
 
         try {
-            const response = await fetch("https://formsubmit.co/ajax/yagi.haruka.11@gmail.com", {
+            const response = await fetch("/api/contact", {
                 method: "POST",
-                headers: {
-                    'Accept': 'application/json'
-                },
                 body: formData,
             });
 
