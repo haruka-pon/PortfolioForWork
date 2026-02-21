@@ -44,28 +44,25 @@ ${message}
         });
 
         if (error) {
-            console.error("Resend API Error:", error);
+            console.error("=============== RESEND DETAILED ERROR ===============");
+            console.error("Error Object:", JSON.stringify(error, null, 2));
+            console.error("Error Name:", error.name);
+            console.error("Error Message:", error.message);
+            console.error("=====================================================");
             return NextResponse.json({ error: error.message }, { status: 400 });
         }
 
         /* 
          * 注意：Resendの無料枠（onboardingドメイン）では、
          * サインアップした自分のアドレス以外（＝お問い合わせしてきた第三者）へメールを送信することが制限されています。
-         * 自動返信機能を使う場合は、事前にご自身のカスタムドメイン（例: haruka.com）をご購入の上、
-         * Resendの dashboard > Domains で設定・認証していただく必要があります。
-         * そのため、自動返信機能は一時的にコメントアウトしています。
          */
-        // await resend.emails.send({
-        //     from: "Acme <onboarding@resend.dev>", 
-        //     to: email, 
-        //     subject: `【自動返信】...`,
-        //     text: `...`
-        // });
 
         // クライアントには成功を返す
         return NextResponse.json({ success: true, message: "Emails sent successfully" });
     } catch (err: unknown) {
-        console.error("API Route Error:", err);
+        console.error("=============== UNHANDLED EXCEPTION ===============");
+        console.error(err);
+        console.error("===================================================");
         const errorMessage = err instanceof Error ? err.message : "Unknown error";
         return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
