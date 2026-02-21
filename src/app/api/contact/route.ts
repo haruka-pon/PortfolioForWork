@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export async function POST(req: Request) {
     try {
@@ -15,25 +15,18 @@ export async function POST(req: Request) {
         }
 
         // 環境変数が設定されていない場合のエラーハンドリング
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.error("Email configuration is missing. Please set EMAIL_USER and EMAIL_PASS in your .env.local file.");
+        if (!process.env.RESEND_API_KEY) {
+            console.error("Resend API key is missing. Please set RESEND_API_KEY in your .env.local file.");
             return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
         }
 
-        // Nodemailerのトランスポーター設定 (Gmailを想定)
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS, // Gmailの「アプリ パスワード」を使用してください
-            },
-        });
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // 1. サイト管理者（自分）宛ての通知メール
-        const mailOptionsToAdmin = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER, // 自分宛て
-            replyTo: email, // 返信先をお客様のメールアドレスに設定
+        // 自分自身（サイト管理者）に送付する通知メール
+        await resend.emails.send({
+            from: "Acme <onboarding@resend.dev>", // デフォルトの送信元アドレス（無料プランの場合）
+            to: process.env.EMAIL_USER || email, // ご自身のメールアドレス（設定されていなければ仮にお客様のアドレス）
+            replyTo: email,
             subject: `【お問い合わせ】ポートフォリオサイトから新しいメッセージが届きました`,
             text: `
 ポートフォリオサイトから新しいお問い合わせがありました。
@@ -47,12 +40,12 @@ ${email}
 【お問い合わせ内容】
 ${message}
             `,
-        };
+        });
 
-        // 2. お問い合わせユーザー宛ての自動返信メール
-        const mailOptionsToUser = {
-            from: `"Haruka's Portfolio" <${process.env.EMAIL_USER}>`,
-            to: email, // 送信者のメールアドレス
+        // ユーザーにお礼メールを自動送信
+        await resend.emails.send({
+            from: "Acme <onboarding@resend.dev>", // 独自のドメインを登録するまではこれを使用
+            to: email, // お問い合わせしてくれた人のメール
             subject: `【自動返信】お問い合わせありがとうございます`,
             text: `
 ${name} 様
@@ -76,11 +69,7 @@ ${message}
 ※このメールはお問い合わせいただいた方に自動で送信しております。
 ※ご返信には1〜2営業日ほどいただく場合がございます。
             `,
-        };
-
-        // メールを送信
-        await transporter.sendMail(mailOptionsToAdmin);
-        await transporter.sendMail(mailOptionsToUser);
+        });
 
         // クライアントには成功を返す
         return NextResponse.json({ success: true, message: "Emails sent successfully" });
