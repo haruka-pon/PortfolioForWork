@@ -6,6 +6,7 @@ import { WorksSection } from "@/components/sections/Works";
 import { ContactSection } from "@/components/sections/Contact";
 import { BackgroundAnimation } from "@/components/ui/BackgroundAnimation";
 import { FloatingNav } from "@/components/ui/FloatingNav";
+import { Footer } from "@/components/layout/Footer";
 
 export default function Home() {
   return (
@@ -18,10 +19,7 @@ export default function Home() {
       <SkillsSection />
       <WorksSection />
       <ContactSection />
-
-      <footer className="py-8 text-center text-sm text-muted-foreground border-t border-border/40 bg-background/50 backdrop-blur-sm">
-        <p>&copy; {new Date().getFullYear()} Haruka. All rights reserved.</p>
-      </footer>
+      <Footer />
     </main>
   );
 }
