@@ -7,7 +7,7 @@ import * as THREE from "three";
 // --- Click Burst Effect ---
 function Explosion({ position }: { position: [number, number, number] }) {
     const meshRef = useRef<THREE.InstancedMesh>(null);
-    const count = 30; // particles per click
+    const count = 15; // Fewer particles per click for subtlety
     const dummy = new THREE.Object3D();
 
     // Pick a random base color for this explosion
@@ -18,7 +18,7 @@ function Explosion({ position }: { position: [number, number, number] }) {
         Array.from({ length: count }, () => {
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.random() * Math.PI;
-            const speed = Math.random() * 0.4 + 0.2; // Fast speed
+            const speed = Math.random() * 0.15 + 0.05; // Slower, softer speed
 
             // Spherical distribution for 3D explosion
             return {
@@ -28,7 +28,7 @@ function Explosion({ position }: { position: [number, number, number] }) {
                     Math.cos(phi) * speed
                 ),
                 pos: new THREE.Vector3(0, 0, 0),
-                scale: Math.random() * 0.8 + 0.4 // Big particles
+                scale: Math.random() * 0.2 + 0.1 // Much smaller particles (was 0.4 - 1.2)
             };
         })
     );
@@ -36,18 +36,18 @@ function Explosion({ position }: { position: [number, number, number] }) {
 
     useFrame((state, delta) => {
         if (!meshRef.current) return;
-        life.current -= delta * 0.8; // Fade out speed
+        life.current -= delta * 1.5; // Fade out much faster
 
         particles.current.forEach((p, i) => {
             p.pos.add(p.vel);
             // Add a little drag and gravity
-            p.vel.multiplyScalar(0.96);
-            p.vel.y -= 0.005;
+            p.vel.multiplyScalar(0.92);
+            p.vel.y -= 0.002;
 
             dummy.position.copy(p.pos);
             // Rotate the particles as they fly
-            dummy.rotation.x += 0.1;
-            dummy.rotation.y += 0.1;
+            dummy.rotation.x += 0.05;
+            dummy.rotation.y += 0.05;
 
             const s = Math.max(0, life.current * p.scale);
             dummy.scale.set(s, s, s);
@@ -61,8 +61,8 @@ function Explosion({ position }: { position: [number, number, number] }) {
 
     return (
         <instancedMesh ref={meshRef} args={[undefined, undefined, count]} position={position}>
-            <icosahedronGeometry args={[0.8, 0]} /> {/* Huge geometry */}
-            <meshBasicMaterial toneMapped={false} /> {/* Basic material so it glows regardless of light */}
+            <icosahedronGeometry args={[0.3, 0]} /> {/* Much smaller base geometry (was 0.8) */}
+            <meshBasicMaterial toneMapped={false} transparent opacity={0.7} /> {/* Semi-transparent so it's not too harsh */}
         </instancedMesh>
     );
 }
