@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
 export async function POST(req: Request) {
+    console.log("=== API Route /api/contact CALLED ===");
     try {
         const formData = await req.formData();
         const name = formData.get('name') as string;
@@ -10,7 +11,8 @@ export async function POST(req: Request) {
 
         // ハニーポット（スパム対策）のチェック
         const honey = formData.get('_honey');
-        if (honey) {
+        if (honey && honey !== '') {
+            console.warn("Spam detected: honey pot filled with:", honey);
             return NextResponse.json({ error: "Spam detected" }, { status: 400 });
         }
 
@@ -22,11 +24,17 @@ export async function POST(req: Request) {
 
         const resend = new Resend(process.env.RESEND_API_KEY);
 
+        // EMAIL_USER が無い場合はエラーにするか、仮のアドレスを設定
+        const toEmail = process.env.EMAIL_USER;
+        if (!toEmail) {
+            console.error("EMAIL_USER is missing in .env.local");
+            return NextResponse.json({ error: "Server configuration error: missing EMAIL_USER" }, { status: 500 });
+        }
+
         // 自分自身（サイト管理者）に送付する通知メール
         const { data, error } = await resend.emails.send({
             from: "Acme <onboarding@resend.dev>", // デフォルトの送信元アドレス（無料プランの場合）
-            // Resendの無料枠（ドメイン未登録）では、Resendに登録したご自身のメールアドレス宛てにしか送信できません
-            to: process.env.EMAIL_USER || "Resendに登録したあなたのメールアドレス",
+            to: toEmail, // Resendに登録したご自身のメールアドレスのみが使用可能
             replyTo: email,
             subject: `【お問い合わせ】ポートフォリオサイトから新しいメッセージが届きました`,
             text: `
