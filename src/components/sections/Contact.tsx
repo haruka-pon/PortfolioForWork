@@ -24,11 +24,14 @@ export function ContactSection() {
                 body: formData,
             });
 
+            const data = await response.json().catch(() => null);
+
             if (response.ok) {
                 setIsSuccess(true);
                 form.reset();
             } else {
-                throw new Error("Failed to submit");
+                console.error("Server API Error Response:", data);
+                throw new Error(data?.error || `Failed to submit: ${response.status}`);
             }
         } catch (error) {
             console.error("Form submission error:", error);
