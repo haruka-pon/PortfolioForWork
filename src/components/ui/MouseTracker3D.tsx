@@ -31,10 +31,12 @@ function Bursts({ clickEvents }: { clickEvents: { id: number; x: number; y: numb
         const latestClick = clickEvents[clickEvents.length - 1];
 
         // Map screen coordinates (-1 to 1) to world coordinates (based on z=0 depth)
+        // With fov 40 and camera at z=10, the view height at z=0 is 2 * 10 * Math.tan((40/2) * Math.PI / 180) = 7.279
+        // The view width is viewHeight * aspect ratio. The useThree viewport provides this directly!
         const worldX = (latestClick.x * viewport.width) / 2;
         const worldY = (latestClick.y * viewport.height) / 2;
 
-        const spawnCount = 20; // particles per click
+        const spawnCount = 30; // particles per click
         let spawned = 0;
 
         // Find dead particles and revive them as a burst
@@ -43,9 +45,9 @@ function Bursts({ clickEvents }: { clickEvents: { id: number; x: number; y: numb
                 particles.current[i].pos.set(worldX, worldY, 0);
                 // Random velocity bursting outward
                 const theta = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 0.15 + 0.05;
+                const speed = Math.random() * 0.4 + 0.2; // Much faster speed to explode across screen
                 particles.current[i].vel.set(Math.cos(theta) * speed, Math.sin(theta) * speed, (Math.random() - 0.5) * speed);
-                particles.current[i].life = 1.0; // 1.0 represents full life, counts down to 0
+                particles.current[i].life = 3.0; // 3.0 represents full life, counts down to 0
                 particles.current[i].color.set(colorPalette[Math.floor(Math.random() * colorPalette.length)]);
 
                 spawned++;
@@ -64,14 +66,15 @@ function Bursts({ clickEvents }: { clickEvents: { id: number; x: number; y: numb
                 // Move particle
                 p.pos.add(p.vel);
                 // Apply slight gravity/drag
-                p.vel.y -= 0.002;
-                p.vel.multiplyScalar(0.98);
+                p.vel.y -= 0.005;
+                p.vel.multiplyScalar(0.95);
 
                 // Decrease life
-                p.life -= delta * 0.5;
+                p.life -= delta * 1.5;
 
                 // Shrink as it dies
-                const scale = Math.max(0, p.life);
+                // Make the initial scale much larger so they are super visible
+                const scale = Math.max(0, p.life * 1.5);
                 dummy.position.copy(p.pos);
                 dummy.scale.set(scale, scale, scale);
                 dummy.updateMatrix();
@@ -96,8 +99,8 @@ function Bursts({ clickEvents }: { clickEvents: { id: number; x: number; y: numb
 
     return (
         <instancedMesh ref={mesh} args={[undefined, undefined, maxParticles]}>
-            <octahedronGeometry args={[0.3, 0]} />
-            <meshStandardMaterial roughness={0.2} metalness={0.8} />
+            <icosahedronGeometry args={[0.5, 0]} />
+            <meshStandardMaterial roughness={0.1} metalness={0.9} />
         </instancedMesh>
     );
 }
