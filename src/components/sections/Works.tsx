@@ -36,7 +36,7 @@ export function WorksSection() {
                     {WORKS_DATA.map((work, index) => {
                         const Icon = work.icon;
                         return (
-                            <Link href={`/works/${work.slug}`} key={work.slug} className="block group">
+                            <Link href={`/works#${work.slug}`} key={work.slug} className="block group">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
