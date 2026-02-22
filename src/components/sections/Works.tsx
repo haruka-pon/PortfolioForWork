@@ -87,6 +87,18 @@ export function WorksSection() {
                         );
                     })}
                 </div>
+
+                <div className="mt-16 text-center">
+                    <Link href="/works">
+                        <motion.span
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="inline-flex items-center justify-center rounded-full text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 h-14 px-10 shadow-lg shadow-primary/20 hover:shadow-primary/40"
+                        >
+                            すべての実績を見る (WORKS一覧へ)
+                        </motion.span>
+                    </Link>
+                </div>
             </div>
         </section>
     );
