@@ -2,40 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, LayoutDashboard, Workflow, Sparkles } from "lucide-react";
-
-const WORKS = [
-    {
-        title: "E-Commerce Platform Renewal",
-        category: "Full Stack Dev",
-        icon: ShoppingCart,
-        color: "text-blue-500",
-        bg: "bg-blue-500/10",
-        tech: ["Laravel", "Vue.js", "AWS", "MySQL"],
-        description: "大規模ECサイトのリニューアル案件。レガシーコードからの脱却とパフォーマンス改善（レスポンスタイム50%短縮）を担当。バックエンドのAPI設計からフロントエンドのつなぎ込みまで一貫して行いました。",
-        role: "API設計・フロント連動",
-    },
-    {
-        title: "Corporate Dashboard System",
-        category: "Frontend Dev",
-        icon: LayoutDashboard,
-        color: "text-purple-500",
-        bg: "bg-purple-500/10",
-        tech: ["React", "TypeScript", "Tailwind CSS"],
-        description: "社内KPI管理用ダッシュボードの設計・実装。直感的なUIとリアルタイムデータ反映を実現し、経営陣の意思決定スピード向上に貢献しました。",
-        role: "UI/UXコンポーネント実装",
-    },
-    {
-        title: "Inventory Management Tool",
-        category: "Tool Dev",
-        icon: Workflow,
-        color: "text-emerald-500",
-        bg: "bg-emerald-500/10",
-        tech: ["Node.js", "Google Apps Script"],
-        description: "スプレッドシートと連携した在庫管理自動化ツール。手作業で行っていたデータ集計処理をプログラム化し、現場の業務工数を月間約40時間削減しました。",
-        role: "要件定義・ツール開発",
-    },
-];
+import { Sparkles } from "lucide-react";
+import Link from "next/link";
+import { WORKS_DATA } from "@/data/works";
 
 export function WorksSection() {
     return (
@@ -64,53 +33,57 @@ export function WorksSection() {
                 </motion.div>
 
                 <div className="space-y-8">
-                    {WORKS.map((work, index) => {
+                    {WORKS_DATA.map((work, index) => {
                         const Icon = work.icon;
                         return (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
-                                transition={{ delay: index * 0.1, duration: 0.5 }}
-                                className="group relative bg-card/40 backdrop-blur-sm border border-white/10 rounded-3xl p-6 md:p-8 hover:bg-card/60 transition-colors shadow-lg hover:shadow-xl hover:border-primary/30"
-                            >
-                                <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
-                                    {/* Visual Representation */}
-                                    <div className={`shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-2xl flex items-center justify-center ${work.bg} ${work.color} shadow-inner transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3`}>
-                                        <Icon className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
-                                    </div>
+                            <Link href={`/works/${work.slug}`} key={work.slug} className="block group">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 30 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-100px" }}
+                                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                                    className="relative bg-card/40 backdrop-blur-sm border border-white/10 rounded-3xl p-6 md:p-8 group-hover:bg-card/60 transition-colors shadow-lg group-hover:shadow-primary/10 group-hover:border-primary/30"
+                                >
+                                    <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start">
+                                        {/* Visual Representation */}
+                                        <div className={`shrink-0 w-24 h-24 md:w-32 md:h-32 rounded-2xl flex items-center justify-center ${work.bg} ${work.color} shadow-inner transition-transform duration-500 group-hover:scale-105 group-hover:rotate-3`}>
+                                            <Icon className="w-12 h-12 md:w-16 md:h-16 opacity-80" />
+                                        </div>
 
-                                    {/* Content */}
-                                    <div className="flex-1 space-y-4">
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                                            <div>
-                                                <Badge variant="outline" className={`${work.color} border-${work.color.split('-')[1]}-500/30 mb-2`}>
-                                                    {work.category}
+                                        {/* Content */}
+                                        <div className="flex-1 space-y-4">
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <div>
+                                                    <Badge variant="outline" className={`${work.color} border-${work.color.split('-')[1]}-500/30 mb-2`}>
+                                                        {work.category}
+                                                    </Badge>
+                                                    <h3 className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
+                                                        {work.title}
+                                                        <span className="opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-2 group-hover:translate-x-0 text-xl">
+                                                            →
+                                                        </span>
+                                                    </h3>
+                                                </div>
+                                                <Badge variant="secondary" className="w-fit bg-secondary/50 backdrop-blur-md">
+                                                    📝 {work.role}
                                                 </Badge>
-                                                <h3 className="text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
-                                                    {work.title}
-                                                </h3>
                                             </div>
-                                            <Badge variant="secondary" className="w-fit bg-secondary/50 backdrop-blur-md">
-                                                📝 {work.role}
-                                            </Badge>
-                                        </div>
 
-                                        <p className="text-muted-foreground leading-relaxed md:text-lg">
-                                            {work.description}
-                                        </p>
+                                            <p className="text-muted-foreground leading-relaxed md:text-lg">
+                                                {work.description}
+                                            </p>
 
-                                        <div className="pt-4 flex flex-wrap gap-2 border-t border-border/50">
-                                            {work.tech.map((t) => (
-                                                <span key={t} className="px-3 py-1 bg-background/50 rounded-full text-xs font-medium text-foreground/80 border border-white/5">
-                                                    {t}
-                                                </span>
-                                            ))}
+                                            <div className="pt-4 flex flex-wrap gap-2 border-t border-border/50">
+                                                {work.tech.map((t) => (
+                                                    <span key={t} className="px-3 py-1 bg-background/50 rounded-full text-xs font-medium text-foreground/80 border border-white/5">
+                                                        {t}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </motion.div>
+                                </motion.div>
+                            </Link>
                         );
                     })}
                 </div>
